@@ -1449,6 +1449,91 @@
         "id": "cart_color_scheme",
         "label": "t:sections.all.colors.label",
         "default": "scheme-1"
+      },
+      {
+        "type": "header",
+        "content": "Free Shipping Bar"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_free_shipping_bar",
+        "label": "Show free shipping progress bar",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "default": "1000",
+        "label": "Free shipping threshold"
+      },
+
+      {
+        "type": "richtext",
+        "id": "free_shipping_bar_message_progress",
+        "default": "<p>Free shipping on orders over $1000</p>",
+        "label": "Progress message",
+        "info": "You can use the following variables: {{ amount }} (the amount of the order), {{ threshold }} (the threshold for free shipping), {{ progress }} (the progress of the order)"
+      },
+      {
+        "type": "richtext",
+        "id": "free_shipping_bar_message_success",
+        "default": "<p>Free shipping on orders over $1000</p>",
+        "label": "Goal achieved message",
+        "info": "You can use the following variables: {{ amount }} (the amount of the order), {{ threshold }} (the threshold for free shipping)"
+      },
+      {
+        "type": "header",
+        "content": "Style"
+      },
+      {
+        "type": "select",
+        "id": "cart_free_shipping_bar_text_align",
+        "label": "Content alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_shipping_bar_background_color",
+        "label": "Background color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_shipping_bar_text_color",
+        "label": "Text color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_shipping_bar_text_success_color",
+        "label": "Text success color",
+        "default": "#3f3f3f"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_shipping_bar_progress_background_color",
+        "label": "Progress background color",
+        "default": "#f0f0f0"
+      },
+      {
+        "type": "color",
+        "id": "cart_free_shipping_bar_success_background_color",
+        "label": "Success background color",
+        "default": "#f9f9f9"
       }
     ]
   }

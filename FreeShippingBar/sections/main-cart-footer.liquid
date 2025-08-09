@@ -2,6 +2,7 @@
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+{{ 'component-free-shipping-bar.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -36,6 +37,9 @@
           >{{ cart.note }}</textarea>
         </cart-note>
       {%- endif -%}
+
+      <!-- Free Shipping Bar -->
+      {%- render 'free-shipping-bar', cart: cart -%}
 
       <div class="cart__blocks">
         {% for block in section.blocks %}
