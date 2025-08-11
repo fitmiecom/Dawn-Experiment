@@ -123,7 +123,7 @@
     "show_free_shipping_bar": true,
     "free_shipping_threshold": "10000",
     "free_shipping_bar_message_progress": "<p>You're only {{ amount }} away from <strong>Free Gift</strong></p>",
-    "free_shipping_bar_message_success": "<p>Congrats! You've unlocked <strong>Free Gift</strong></p>",
+    "free_shipping_bar_message_success": "<p>🎉 Congrats! You've unlocked <strong>Free Gift</strong></p>",
     "cart_free_shipping_bar_background_color": "#ffffff",
     "cart_free_shipping_bar_text_color": "#121212",
     "cart_free_shipping_bar_text_success_color": "#8ed93a",

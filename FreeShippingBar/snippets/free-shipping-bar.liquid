@@ -38,16 +38,13 @@
     <div class="free-shipping-bar__container">
       {%- if has_free_shipping -%}
         <div class="free-shipping-bar__message free-shipping-bar__message--success">
-          <span class="free-shipping-bar__icon">
-            {%- render 'icon-checkmark' -%}
-          </span>
-          <span class="free-shipping-bar__text">
+          <span class="free-shipping-bar__tex rte">
             {{ settings.free_shipping_bar_message_success }}
           </span>
         </div>
       {%- else -%}
         <div class="free-shipping-bar__progress">
-          <div class="free-shipping-bar__progress-text">
+          <div class="free-shipping-bar__progress-text rte">
             {{ progress_message_html }}
           </div>
         </div>
