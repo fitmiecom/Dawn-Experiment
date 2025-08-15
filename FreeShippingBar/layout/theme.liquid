@@ -296,6 +296,14 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    {{ 'component-free-shipping-bar.css' | asset_url | stylesheet_tag }}
+    <script>
+      window.freeShippingStrings = {
+          free_shipping_qualified: `{{ settings.free_shipping_bar_message_success }}`,
+          free_shipping_progress: `{{ settings.free_shipping_bar_message_progress }}`,
+        };
+    </script>
+    <script src="{{ 'free-shipping-bar.js' | asset_url }}" defer="defer"></script>
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -334,7 +342,7 @@
 
       window.cartStrings = {
         error: `{{ 'sections.cart.cart_error' | t }}`,
-        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,
+        quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`
       };
 
       window.variantStrings = {

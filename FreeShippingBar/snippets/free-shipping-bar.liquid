@@ -1,24 +1,23 @@
 {% comment %}
   Renders free shipping progress bar
-  
+
   Usage:
   {% render 'free-shipping-bar', cart: cart %}
 {% endcomment %}
 
 {%- liquid
-  assign free_shipping_threshold = settings.free_shipping_threshold | times: 1 | default: 1000
+  assign free_shipping_threshold = settings.free_shipping_threshold | times: 100
   assign cart_total = cart.total_price
   assign remaining_amount = free_shipping_threshold | minus: cart_total
   assign progress_percentage = cart_total | times: 100 | divided_by: free_shipping_threshold
   assign progress_percentage = progress_percentage | at_least: 0 | at_most: 100
-  
+
   if remaining_amount <= 0
     assign has_free_shipping = true
   else
     assign has_free_shipping = false
   endif
 
-  assign current_formatted = cart_total | money
   assign remaining_formatted = remaining_amount | money
   assign threshold_formatted = free_shipping_threshold | money
   assign progress_percent_formatted = progress_percentage | round | append: '%'
@@ -34,21 +33,18 @@
       --text-align: {{ settings.cart_free_shipping_bar_text_align }};
     }
   </style>
+
   <free-shipping-bar class="free-shipping-bar" data-free-shipping-threshold="{{ free_shipping_threshold }}">
     <div class="free-shipping-bar__container">
-      {%- if has_free_shipping -%}
-        <div class="free-shipping-bar__message free-shipping-bar__message--success">
-          <span class="free-shipping-bar__tex rte">
-            {{ settings.free_shipping_bar_message_success }}
+        <div class="free-shipping-bar__message">
+          <span class="free-shipping-bar__text rte">
+            {%- if has_free_shipping -%}
+              {{- settings.free_shipping_bar_message_success -}}
+            {%- else -%}
+              {{- progress_message_html -}}
+            {% endif %}
           </span>
         </div>
-      {%- else -%}
-        <div class="free-shipping-bar__progress">
-          <div class="free-shipping-bar__progress-text rte">
-            {{ progress_message_html }}
-          </div>
-        </div>
-      {%- endif -%}
       <div class="free-shipping-bar__progress-bar">
         <div class="free-shipping-bar__progress-fill" style="width: {{ progress_percentage }}%"
           data-progress="{{ progress_percentage }}"></div>

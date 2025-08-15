@@ -7,11 +7,9 @@
 
 {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-free-shipping-bar.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'free-shipping-bar.js' | asset_url }}" defer="defer"></script>
 
 <style>
   .drawer {
@@ -79,7 +77,9 @@
         </button>
       </div>
       <!-- Free Shipping Bar -->
-      {%- render 'free-shipping-bar', cart: cart -%}
+      {% unless cart == empty %}
+        {%- render 'free-shipping-bar', cart: cart -%}
+      {% endunless %}
       <cart-drawer-items
         {% if cart == empty %}
           class=" is-empty"
