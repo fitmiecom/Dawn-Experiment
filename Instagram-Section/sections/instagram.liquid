@@ -1,551 +1,10 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
-
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-
-  .instagram-section {
-    --instagram-grid-gap: 1rem;
-    --instagram-item-radius: 8px;
-    --instagram-overlay-opacity: 0.8;
-  }
-
-  .instagram-grid {
-    display: grid;
-    grid-template-columns: repeat({{ section.settings.item_per_row | default: 3 }}, 1fr);
-    gap: var(--instagram-grid-gap);
-    margin-top: 2rem;
-  }
-
-  .instagram-item {
-    position: relative;
-    border-radius: var(--instagram-item-radius);
-    overflow: hidden;
-    background: var(--color-background);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-  }
-
-  /* Preload ready indicator */
-  .instagram-item::after {
-    content: '';
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 8px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .instagram-item[data-preload-ready="true"]::after {
-    background: #4CAF50;
-    opacity: 1;
-  }
-
-  .instagram-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  }
-
-  .instagram-media {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    overflow: hidden;
-  }
-
-  .instagram-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  .instagram-item:hover .instagram-media img {
-    transform: scale(1.05);
-  }
-
-  .instagram-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, var(--instagram-overlay-opacity)) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.5rem;
-  }
-
-  .instagram-item:hover .instagram-overlay {
-    opacity: 1;
-  }
-
-  .instagram-content {
-    color: white;
-    width: 100%;
-  }
-
-  .instagram-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
-  }
-
-  .instagram-description {
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-bottom: 0.75rem;
-    opacity: 0.9;
-  }
-
-  .instagram-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-    opacity: 0.8;
-  }
-
-  .instagram-tag {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-weight: 500;
-  }
-
-  .instagram-date {
-    font-style: italic;
-  }
-
-  .instagram-product-link {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--color-text);
-    padding: 0.5rem 0.75rem;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 500;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-  }
-
-  .instagram-item:hover .instagram-product-link {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .instagram-product-link:hover {
-    background: white;
-    transform: translateY(0) scale(1.05);
-  }
-
-  .instagram-header {
-    text-align: {{ section.settings.content_alignment }};
-    margin-bottom: 2rem;
-  }
-
-  .instagram-heading {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.2;
-  }
-
-  .instagram-subheading {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    opacity: 0.8;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  @media screen and (max-width: 749px) {
-    .instagram-grid {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 0.75rem;
-    }
-
-    .instagram-heading {
-      font-size: 2rem;
-    }
-
-    .instagram-subheading {
-      font-size: 1rem;
-    }
-
-    .instagram-overlay {
-      padding: 1rem;
-    }
-
-    .instagram-title {
-      font-size: 1rem;
-    }
-
-    .instagram-description {
-      font-size: 0.85rem;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    .instagram-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Modal Styles */
-  .instagram-modal-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-  }
-
-  .instagram-modal-container.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .instagram-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-
-  .instagram-modal-content {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    max-height: 90vh;
-    background: var(--color-background);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  }
-
-  .instagram-modal-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-
-  .instagram-modal-close:hover {
-    background: white;
-    transform: scale(1.1);
-  }
-
-  .instagram-modal-slider {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  .instagram-modal-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-    border: none;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-
-  .instagram-modal-nav:hover {
-    background: white;
-    transform: translateY(-50%) scale(1.1);
-  }
-
-  .instagram-modal-prev {
-    left: 1rem;
-  }
-
-  .instagram-modal-next {
-    right: 1rem;
-  }
-
-  .instagram-modal-slide-container {
-    flex: 1;
-    height: 100%;
-  }
-
-  .instagram-modal-slide {
-    display: flex;
-    height: 100%;
-  }
-
-  .instagram-modal-media {
-    flex: 1;
-    position: relative;
-    background: #000;
-  }
-
-  .instagram-modal-image-container,
-  .instagram-modal-video-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .instagram-modal-image-container img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-
-  .instagram-modal-video-container video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .instagram-modal-video-controls {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .instagram-modal-sound-btn,
-  .instagram-modal-play-btn {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-  }
-
-  .instagram-modal-sound-btn:hover,
-  .instagram-modal-play-btn:hover {
-    background: rgba(0, 0, 0, 0.9);
-    transform: scale(1.1);
-  }
-
-  .instagram-modal-info {
-    flex: 0 0 400px;
-    padding: 2rem;
-    background: var(--color-background);
-    overflow-y: auto;
-  }
-
-  .instagram-modal-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    line-height: 1.3;
-  }
-
-  .instagram-modal-description {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    color: var(--color-text);
-    opacity: 0.8;
-  }
-
-  .instagram-modal-meta {
-    margin-bottom: 1.5rem;
-  }
-
-  .instagram-modal-tag {
-    display: inline-block;
-    background: var(--color-accent);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-
-  .instagram-modal-product-link {
-    margin-top: 1rem;
-  }
-
-  .instagram-modal-product-link a {
-    display: inline-block;
-    background: var(--color-button);
-    color: var(--color-button-text);
-    padding: 0.75rem 1.5rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  .instagram-modal-product-link a:hover {
-    background: var(--color-button-hover);
-    transform: translateY(-2px);
-  }
-
-  .instagram-modal-indicators {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-  }
-
-  /* Loading state */
-  .instagram-modal-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: white;
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  .instagram-modal-loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-
-  /* Mobile Responsive */
-  @media screen and (max-width: 768px) {
-    .instagram-modal-overlay {
-      padding: 1rem;
-    }
-
-    .instagram-modal-content {
-      max-height: 95vh;
-    }
-
-    .instagram-modal-slide {
-      flex-direction: column;
-    }
-
-    .instagram-modal-media {
-      flex: 0 0 60%;
-    }
-
-    .instagram-modal-info {
-      flex: 0 0 40%;
-      padding: 1rem;
-    }
-
-    .instagram-modal-title {
-      font-size: 1.2rem;
-    }
-
-    .instagram-modal-description {
-      font-size: 0.9rem;
-    }
-
-    .instagram-modal-nav {
-      width: 40px;
-      height: 40px;
-    }
-
-    .instagram-modal-prev {
-      left: 0.5rem;
-    }
-
-    .instagram-modal-next {
-      right: 0.5rem;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    .instagram-modal-slide {
-      flex-direction: column;
-    }
-
-    .instagram-modal-media {
-      flex: 0 0 50%;
-    }
-
-    .instagram-modal-info {
-      flex: 0 0 50%;
-      padding: 0.75rem;
-    }
-
-    .instagram-modal-title {
-      font-size: 1rem;
-    }
-
-    .instagram-modal-description {
-      font-size: 0.8rem;
-    }
-  }
-{%- endstyle -%}
-
-<div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
-  <div class="page-width">
-    <div class="instagram-header{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+{{ 'component-instafeed.css' | asset_url | stylesheet_tag }}
+
+<instafeed class="instafeed-section" style="--section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="instafeed-container">
+    <div class="instagram-header" style="text-align: {{ section.settings.content_alignment }};">
       {%- if section.settings.heading != blank -%}
         <h2 class="instagram-heading">
           {{ section.settings.heading | escape }}
@@ -560,9 +19,10 @@
     </div>
 
     {%- if section.blocks.size > 0 -%}
-      <div class="instagram-grid{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="instagram-grid" style="--instagram-grid-gap: {{ section.settings.grid_gap }}px; --item-per-row: {{ section.settings.item_per_row }};">
         {%- for block in section.blocks -%}
-          <div class="instagram-item" 
+
+          <div class="instagram-item"
                {{ block.shopify_attributes }}
                data-modal-trigger
                data-block-id="{{ block.id }}"
@@ -572,72 +32,91 @@
                data-tag="{{ block.settings.tag | escape }}"
                data-product-url="{{ block.settings.product.url | default: '' }}"
                data-product-title="{{ block.settings.product.title | default: '' }}"
-               data-image-url="{% if block.settings.image %}{{ block.settings.image | image_url: width: 800 }}{% endif %}"
-               data-video-url="{{ block.settings.video | default: '' }}"
+               {% if block.settings.image %}
+               data-image-url="{{ block.settings.image | image_url: width: 800 }}"
+               {% endif %}
+               {% if block.settings.video %}
+               data-video-url="{{ block.settings.video.sources[0].url }}"
+               data-video-type="{% if block.settings.video contains 'youtube' %}youtube{% elsif block.settings.video contains 'vimeo' %}vimeo{% else %}mp4{% endif %}"
+
+               {% endif %}
                data-has-video="{% if block.settings.video != blank %}true{% else %}false{% endif %}">
             {%- if block.settings.image != blank or block.settings.video != blank -%}
               <div class="instagram-media" data-block-id="{{ block.id }}" data-block-index="{{ forloop.index0 }}">
                 {%- if block.settings.video != blank -%}
-                  <video 
-                    muted 
-                    loop 
-                    playsinline
-                    poster="{{ block.settings.image | image_url: width: 600 }}"
-                    data-video-url="{{ block.settings.video }}"
-                  >
-                    <source src="{{ block.settings.video }}" type="video/mp4">
-                  </video>
+                  {%- if block.settings.video contains 'youtube' or block.settings.video contains 'vimeo' -%}
+                    <div class="instagram-video-placeholder" style="background-image: url('{{ block.settings.image | image_url: width: 600 }}');">
+                      <div class="instagram-video-play-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 5V19L19 12L8 5Z" fill="white"/>
+                        </svg>
+                      </div>
+                    </div>
+                  {%- else -%}
+
+										{{ block.settings.video | video_tag: image_size: '1100x', autoplay: true, loop: true, controls: true, muted: true, class: 'instagram-video' }}
+                  {%- endif -%}
                 {%- elsif block.settings.image != blank -%}
-                  {{
-                    block.settings.image
-                    | image_url: width: 600
-                    | image_tag: loading: 'lazy', alt: block.settings.image.alt | escape
-                  }}
+                  {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.image.alt | escape }}
                 {%- endif -%}
+              </div>
+              {% else %}
+              <div class="instagram-media-placeholder">
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
               </div>
             {%- endif -%}
 
             <div class="instagram-overlay">
-              <div class="instagram-content">
-                {%- if block.settings.title != blank -%}
-                  <h3 class="instagram-title">
-                    {{ block.settings.title | escape }}
-                  </h3>
-                {%- endif -%}
+              {% unless block.settings.show_title -%}
+                 <svg class="icon icon-instagram" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M13.23 3.492c-.84-.037-1.096-.046-3.23-.046-2.144 0-2.39.01-3.238.055-.776.027-1.195.164-1.487.273a2.4 2.4 0 0 0-.912.593 2.5 2.5 0 0 0-.602.922c-.11.282-.238.702-.274 1.486-.046.84-.046 1.095-.046 3.23s.01 2.39.046 3.229c.004.51.097 1.016.274 1.495.145.365.319.639.602.913.282.282.538.456.92.602.474.176.974.268 1.479.273.848.046 1.103.046 3.238.046s2.39-.01 3.23-.046c.784-.036 1.203-.164 1.486-.273.374-.146.648-.329.921-.602.283-.283.447-.548.602-.922.177-.476.27-.979.274-1.486.037-.84.046-1.095.046-3.23s-.01-2.39-.055-3.229c-.027-.784-.164-1.204-.274-1.495a2.4 2.4 0 0 0-.593-.913 2.6 2.6 0 0 0-.92-.602c-.284-.11-.703-.237-1.488-.273ZM6.697 2.05c.857-.036 1.131-.045 3.302-.045a63 63 0 0 1 3.302.045c.664.014 1.321.14 1.943.374a4 4 0 0 1 1.414.922c.41.397.728.88.93 1.414.23.622.354 1.279.365 1.942C18 7.56 18 7.824 18 10.005c0 2.17-.01 2.444-.046 3.292-.036.858-.173 1.442-.374 1.943-.2.53-.474.976-.92 1.423a3.9 3.9 0 0 1-1.415.922c-.51.191-1.095.337-1.943.374-.857.036-1.122.045-3.302.045-2.171 0-2.445-.009-3.302-.055-.849-.027-1.432-.164-1.943-.364a4.15 4.15 0 0 1-1.414-.922 4.1 4.1 0 0 1-.93-1.423c-.183-.51-.329-1.085-.365-1.943C2.009 12.45 2 12.167 2 10.004c0-2.161 0-2.435.055-3.302.027-.848.164-1.432.365-1.942a4.4 4.4 0 0 1 .92-1.414 4.2 4.2 0 0 1 1.415-.93c.51-.183 1.094-.33 1.943-.366Zm.427 4.806a4.105 4.105 0 1 1 5.805 5.805 4.105 4.105 0 0 1-5.805-5.805m1.882 5.371a2.668 2.668 0 1 0 2.042-4.93 2.668 2.668 0 0 0-2.042 4.93m5.922-5.942a.958.958 0 1 1-1.355-1.355.958.958 0 0 1 1.355 1.355" clip-rule="evenodd"/></svg>
+              {% endunless %}
+              <div class="instagram-content" style="display: {{ block.settings.show_title | replace: 'true', 'block' | replace: 'false', 'none' }};">
 
-                {%- if block.settings.description != blank -%}
-                  <div class="instagram-description">
-                    {{ block.settings.description }}
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="instagram-title">
+                      {{ block.settings.title | escape }}
+                    </h3>
+                  {%- endif -%}
+
+                  {%- if block.settings.description != blank -%}
+                    <div class="instagram-description">
+                      {{ block.settings.description }}
+                    </div>
+                  {%- endif -%}
+
+                  <div class="instagram-meta">
+                    {%- if block.settings.tag != blank -%}
+                      <span class="instagram-tag">
+                        {{ block.settings.tag | escape }}
+                      </span>
+                    {%- endif -%}
+                    {%- if block.settings.product != blank -%}
+                              <a href="{{ block.settings.product.url }}" class="instagram-product-link">
+                      View Product
+                      </a>
+                    {%- endif -%}
                   </div>
-                {%- endif -%}
 
-                <div class="instagram-meta">
-                  {%- if block.settings.tag != blank -%}
-                    <span class="instagram-tag">
-                      {{ block.settings.tag | escape }}
-                    </span>
-                  {%- endif -%}
-
-                  {%- if block.settings.date != blank -%}
-                    <span class="instagram-date">
-                      {{ block.settings.date | escape }}
-                    </span>
-                  {%- endif -%}
                 </div>
               </div>
+              {%- if block.settings.product_list != blank -%}
+              <div class="instagram-products-list js-instagram-products-list" style="width: 0; height: 0; overflow: hidden;">
+                {% for product in block.settings.product_list %}
+                  <div class="instagram-product-item">
+                    <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title }}" width="{{product.featured_image.width}}" height="{{product.featured_image.height}}" class="instagram-product-image">
+                    <a href="{{ product.url }}" class="instagram-product-link">
+                      {{ product.title }}
+                    </a>
+                  </div>
+                {% endfor %}
+              </div>
+              {%- endif -%}
             </div>
-
-            {%- if block.settings.product != blank -%}
-                             <a href="{{ block.settings.product.url }}" class="instagram-product-link">
-                 View Product
-               </a>
-            {%- endif -%}
-          </div>
         {%- endfor -%}
       </div>
     {%- endif -%}
   </div>
-</div>
+</instafeed>
 
 <!-- Instagram Modal Container -->
 <instagram-modal 
@@ -645,6 +124,39 @@
   class="instagram-modal-container"
   data-section-id="{{ section.id }}"
   data-total-blocks="{{ section.blocks.size }}">
+{% comment %}
+	<button class="close-instagram-modal">
+		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+		</svg>
+	</button>
+	<div class="instagram-modal-content">
+		<div class="instagram-modal-slider">
+			{% for block in section.blocks %}
+			<div class="instagram-modal-slide" 111111>
+					<div class="instagram-modal-media">
+						{% if block.settings.image != blank %}
+							{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.image.alt | escape }}
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div class="slide-controls">
+		<button class="prev-instagram-modal">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</button>
+		<button class="next-instagram-modal">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</button>
+	</div>
+	 {% endcomment %}
 </instagram-modal>
 
 <script>
@@ -659,7 +171,7 @@ class InstagramModal extends HTMLElement {
     this.isVideoPlaying = false;
     this.preloadedMedia = new Map();
     this.isPreloaded = false;
-    
+
     this.init();
   }
 
@@ -680,15 +192,21 @@ class InstagramModal extends HTMLElement {
           </button>
           
           <div class="instagram-modal-slider">
-            <button class="instagram-modal-nav instagram-modal-prev" data-modal-prev>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
             
+
             <div class="instagram-modal-slide-container">
               <div class="instagram-modal-slide">
                 <div class="instagram-modal-media">
+                <button class="instagram-modal-nav instagram-modal-prev" data-modal-prev>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="instagram-modal-nav instagram-modal-next" data-modal-next>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
                   <div class="instagram-modal-image-container"></div>
                   <div class="instagram-modal-video-container" style="display: none;">
                     <video muted loop playsinline>
@@ -718,6 +236,11 @@ class InstagramModal extends HTMLElement {
                       </button>
                     </div>
                   </div>
+                  <div class="instagram-modal-indicators">
+                    <span class="instagram-modal-counter">
+                      <span class="current-slide">1</span> / <span class="total-slides">{{ section.blocks.size }}</span>
+                    </span>
+                  </div>
                 </div>
                 <div class="instagram-modal-info">
                   <h3 class="instagram-modal-title"></h3>
@@ -725,26 +248,69 @@ class InstagramModal extends HTMLElement {
                   <div class="instagram-modal-meta">
                     <span class="instagram-modal-tag"></span>
                   </div>
-                  <div class="instagram-modal-product-link"></div>
+                  <div class="instagram-modal-products-list js-instagram-modal-products-list"></div>
                 </div>
               </div>
             </div>
-            
-            <button class="instagram-modal-nav instagram-modal-next" data-modal-next>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-          
-          <div class="instagram-modal-indicators">
-            <span class="instagram-modal-counter">
-              <span class="current-slide">1</span> / <span class="total-slides">{{ section.blocks.size }}</span>
-            </span>
+
+
           </div>
         </div>
       </div>
     `;
+    
+    // Bind events after creating HTML
+    this.bindModalEvents();
+  }
+
+  bindModalEvents() {
+    // Modal close
+    const closeBtn = this.querySelector('[data-modal-close]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        this.closeModal();
+      });
+    }
+
+    // Modal overlay close
+    const overlay = this.querySelector('[data-modal-overlay]');
+    if (overlay) {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+          this.closeModal();
+        }
+      });
+    }
+
+    // Navigation
+    const prevBtn = this.querySelector('[data-modal-prev]');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        this.prevSlide();
+      });
+    }
+
+    const nextBtn = this.querySelector('[data-modal-next]');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        this.nextSlide();
+      });
+    }
+
+    // Video controls
+    const soundBtn = this.querySelector('[data-sound-toggle]');
+    if (soundBtn) {
+      soundBtn.addEventListener('click', () => {
+        this.toggleSound();
+      });
+    }
+
+    const playBtn = this.querySelector('[data-play-toggle]');
+    if (playBtn) {
+      playBtn.addEventListener('click', () => {
+        this.togglePlay();
+      });
+    }
   }
 
   bindEvents() {
@@ -757,37 +323,7 @@ class InstagramModal extends HTMLElement {
       });
     });
 
-    // Modal close
-    this.querySelector('[data-modal-close]').addEventListener('click', () => {
-      this.closeModal();
-    });
-
-    // Modal overlay close
-    this.querySelector('[data-modal-overlay]').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) {
-        this.closeModal();
-      }
-    });
-
-    // Navigation
-    this.querySelector('[data-modal-prev]').addEventListener('click', () => {
-      this.prevSlide();
-    });
-
-    this.querySelector('[data-modal-next]').addEventListener('click', () => {
-      this.nextSlide();
-    });
-
-    // Video controls
-    this.querySelector('[data-sound-toggle]').addEventListener('click', () => {
-      this.toggleSound();
-    });
-
-    this.querySelector('[data-play-toggle]').addEventListener('click', () => {
-      this.togglePlay();
-    });
-
-    // Keyboard navigation
+    // Keyboard navigation (global)
     document.addEventListener('keydown', (e) => {
       if (!this.isOpen) return;
       
@@ -841,14 +377,23 @@ class InstagramModal extends HTMLElement {
     triggers.forEach((trigger, index) => {
       const imageUrl = trigger.dataset.imageUrl;
       const videoUrl = trigger.dataset.videoUrl;
+      const videoType = trigger.dataset.videoType;
       const hasVideo = trigger.dataset.hasVideo === 'true';
 
       if (hasVideo && videoUrl) {
-        // Preload video
-        this.preloadVideo(videoUrl, imageUrl, index, () => {
-          loadedCount++;
-          this.updatePreloadProgress(loadedCount, totalItems);
-        });
+        if (videoType === 'youtube' || videoType === 'vimeo') {
+          // For YouTube/Vimeo, just preload the image
+          this.preloadImage(imageUrl, index, () => {
+            loadedCount++;
+            this.updatePreloadProgress(loadedCount, totalItems);
+          });
+        } else {
+          // Preload MP4 video
+          this.preloadVideo(videoUrl, imageUrl, index, () => {
+            loadedCount++;
+            this.updatePreloadProgress(loadedCount, totalItems);
+          });
+        }
       } else if (imageUrl) {
         // Preload image
         this.preloadImage(imageUrl, index, () => {
@@ -887,7 +432,7 @@ class InstagramModal extends HTMLElement {
     const video = document.createElement('video');
     video.muted = true;
     video.preload = 'metadata';
-    
+
     if (posterUrl) {
       video.poster = posterUrl;
     }
@@ -954,11 +499,41 @@ class InstagramModal extends HTMLElement {
     }
   }
 
+  getEmbedUrl(url, type) {
+    if (type === 'youtube') {
+      // Extract YouTube video ID and create embed URL
+      const videoId = this.extractYouTubeId(url);
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}`;
+    } else if (type === 'vimeo') {
+      // Extract Vimeo video ID and create embed URL
+      const videoId = this.extractVimeoId(url);
+      return `https://player.vimeo.com/video/${videoId}?autoplay=1&muted=1&loop=1`;
+    }
+    return url;
+  }
+
+  extractYouTubeId(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+
+  extractVimeoId(url) {
+    const regExp = /vimeo\.com\/([0-9]+)/;
+    const match = url.match(regExp);
+    return match ? match[1] : null;
+  }
+
   openModal(index) {
     this.currentIndex = index;
     this.isOpen = true;
     this.classList.add('active');
     document.body.style.overflow = 'hidden';
+    
+    // Ensure modal HTML is created before loading content
+    if (!this.querySelector('.instagram-modal-content')) {
+      this.createModalHTML();
+    }
     
     // Show loading state if content isn't preloaded
     if (!this.isPreloaded) {
@@ -981,6 +556,25 @@ class InstagramModal extends HTMLElement {
     
     if (!trigger) return;
 
+    // Ensure modal elements exist
+    let imageContainer = this.querySelector('.instagram-modal-image-container');
+    let videoContainer = this.querySelector('.instagram-modal-video-container');
+    let video = videoContainer?.querySelector('video');
+    
+    if (!imageContainer || !videoContainer) {
+      console.warn('Modal elements not found, creating modal HTML first');
+      this.createModalHTML();
+      // Re-query elements after creation
+      imageContainer = this.querySelector('.instagram-modal-image-container');
+      videoContainer = this.querySelector('.instagram-modal-video-container');
+      video = videoContainer?.querySelector('video');
+      
+      if (!imageContainer || !videoContainer) {
+        console.error('Failed to create modal elements');
+        return;
+      }
+    }
+
     const title = trigger.dataset.title;
     const description = trigger.dataset.description;
     const tag = trigger.dataset.tag;
@@ -988,19 +582,31 @@ class InstagramModal extends HTMLElement {
     const productTitle = trigger.dataset.productTitle;
     const imageUrl = trigger.dataset.imageUrl;
     const videoUrl = trigger.dataset.videoUrl;
+    const videoType = trigger.dataset.videoType;
     const hasVideo = trigger.dataset.hasVideo === 'true';
-
     // Update content
     this.querySelector('.instagram-modal-title').textContent = title;
     this.querySelector('.instagram-modal-description').textContent = description;
     this.querySelector('.instagram-modal-tag').textContent = tag;
     
     // Update product link
-    const productLinkContainer = this.querySelector('.instagram-modal-product-link');
-    if (productUrl && productTitle) {
-      productLinkContainer.innerHTML = `<a href="${productUrl}">View ${productTitle}</a>`;
+    // Move product list HTML if visible
+    const modalProductsList = this.querySelector('.js-instagram-modal-products-list');
+    // Get the corresponding visible js-instagram-products-list from the grid
+    const allProductsLists = document.querySelectorAll('.js-instagram-products-list');
+    let blockIndex = index;
+    if (triggers[blockIndex]) {
+      // Find the .js-instagram-products-list inside the corresponding grid item (preferring visible one)
+      const container = triggers[blockIndex].closest('.instagram-item');
+      const gridProductsList = container ? container.querySelector('.js-instagram-products-list') : null;
+      // If it exists and is visible, use its HTML
+      if (gridProductsList && gridProductsList.offsetParent !== null) {
+        modalProductsList.innerHTML = gridProductsList.innerHTML;
+      } else {
+        modalProductsList.innerHTML = '';
+      }
     } else {
-      productLinkContainer.innerHTML = '';
+      modalProductsList.innerHTML = '';
     }
     
     // Update counter
@@ -1010,46 +616,64 @@ class InstagramModal extends HTMLElement {
     this.hideLoadingState();
 
     // Handle media using preloaded content
-    const imageContainer = this.querySelector('.instagram-modal-image-container');
-    const videoContainer = this.querySelector('.instagram-modal-video-container');
-    const video = videoContainer.querySelector('video');
+    // Note: imageContainer, videoContainer, and video are already declared above
 
     if (hasVideo && videoUrl) {
-      // Show video
-      imageContainer.style.display = 'none';
-      videoContainer.style.display = 'block';
-      
-      // Use preloaded video if available
-      const preloadedData = this.preloadedMedia.get(index);
-      if (preloadedData && preloadedData.type === 'video' && !preloadedData.failed) {
-        // Clone the preloaded video to avoid conflicts
-        const preloadedVideo = preloadedData.element;
-        video.src = preloadedVideo.src;
-        video.poster = preloadedVideo.poster;
-        video.currentTime = 0; // Reset to beginning
-        this.currentVideo = video;
+      console.log('videoUrl', videoUrl);
+      if (videoType === 'youtube' || videoType === 'vimeo') {
+        // Show embedded video for YouTube/Vimeo
+        imageContainer.style.display = 'none';
+        videoContainer.style.display = 'block';
+
+        // Create embedded video iframe
+        const embedUrl = this.getEmbedUrl(videoUrl, videoType);
+        videoContainer.innerHTML = `
+          <iframe 
+            src="${embedUrl}" 
+            frameborder="0" 
+            allowfullscreen
+            style="width: 100%; height: 100%;"
+          ></iframe>
+        `;
+        this.currentVideo = null; // No video controls for embedded videos
       } else {
-        // Fallback to original method if not preloaded or failed
-        video.src = videoUrl;
-        video.poster = imageUrl;
-        this.currentVideo = video;
-      }
-      
-      // Reset video controls
-      this.isVideoMuted = true;
-      this.isVideoPlaying = false;
-      this.updateVideoControls();
-      
-      // Auto play
-      video.play().then(() => {
-        this.isVideoPlaying = true;
-        this.updateVideoControls();
-      }).catch(() => {
-        // Auto-play failed, show play button
+        // Show MP4 video
+        imageContainer.style.display = 'none';
+        videoContainer.style.display = 'block';
+
+        // Use preloaded video if available
+        const preloadedData = this.preloadedMedia.get(index);
+        if (preloadedData && preloadedData.type === 'video' && !preloadedData.failed) {
+          // Clone the preloaded video to avoid conflicts
+          const preloadedVideo = preloadedData.element;
+          video.src = preloadedVideo.src;
+          video.poster = preloadedVideo.poster;
+          video.currentTime = 0; // Reset to beginning
+          this.currentVideo = video;
+        } else {
+          // Fallback to original method if not preloaded or failed
+          video.src = videoUrl;
+          video.poster = imageUrl;
+          this.currentVideo = video;
+        }
+
+        // Reset video controls
+        this.isVideoMuted = true;
         this.isVideoPlaying = false;
         this.updateVideoControls();
-      });
+
+        // Auto play
+        video.play().then(() => {
+          this.isVideoPlaying = true;
+          this.updateVideoControls();
+        }).catch(() => {
+          // Auto-play failed, show play button
+          this.isVideoPlaying = false;
+          this.updateVideoControls();
+        });
+      }
     } else {
+      console.log('imageUrl 111111', imageUrl);
       // Show image
       imageContainer.style.display = 'block';
       videoContainer.style.display = 'none';
@@ -1058,10 +682,10 @@ class InstagramModal extends HTMLElement {
       const preloadedData = this.preloadedMedia.get(index);
       if (preloadedData && preloadedData.type === 'image' && !preloadedData.failed) {
         const preloadedImg = preloadedData.element;
-        imageContainer.innerHTML = `<img src="${preloadedImg.src}" alt="${title}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+        imageContainer.innerHTML = `<img src="${preloadedImg.src}" alt="${title}" class="instagram-modal-image">`;
       } else {
         // Fallback to original method if not preloaded or failed
-        imageContainer.innerHTML = `<img src="${imageUrl}" alt="${title}" loading="lazy">`;
+        imageContainer.innerHTML = `<img src="${imageUrl}" alt="${title}" loading="lazy" class="instagram-modal-image">`;
       }
       this.currentVideo = null;
     }
@@ -1088,6 +712,14 @@ class InstagramModal extends HTMLElement {
       this.currentVideo.pause();
       this.isVideoPlaying = false;
       this.updateVideoControls();
+    } else {
+      // Handle embedded videos (YouTube/Vimeo)
+      const iframe = this.querySelector('.instagram-modal-video-container iframe');
+      if (iframe) {
+        // For embedded videos, we can't directly control them, but we can remove the iframe
+        // and recreate it when needed to "pause" the video
+        iframe.style.display = 'none';
+      }
     }
   }
 
@@ -1115,27 +747,38 @@ class InstagramModal extends HTMLElement {
   updateVideoControls() {
     const soundBtn = this.querySelector('[data-sound-toggle]');
     const playBtn = this.querySelector('[data-play-toggle]');
-    const mutedIcon = soundBtn.querySelector('.sound-icon.muted');
-    const unmutedIcon = soundBtn.querySelector('.sound-icon.unmuted');
-    const playIcon = playBtn.querySelector('.play-icon');
-    const pauseIcon = playBtn.querySelector('.pause-icon');
+    
+    // Only show controls for MP4 videos, not embedded videos
+    if (this.currentVideo) {
+      soundBtn.style.display = 'flex';
+      playBtn.style.display = 'flex';
+      
+      const mutedIcon = soundBtn.querySelector('.sound-icon.muted');
+      const unmutedIcon = soundBtn.querySelector('.sound-icon.unmuted');
+      const playIcon = playBtn.querySelector('.play-icon');
+      const pauseIcon = playBtn.querySelector('.pause-icon');
 
-    // Update sound button
-    if (this.isVideoMuted) {
-      mutedIcon.style.display = 'block';
-      unmutedIcon.style.display = 'none';
-    } else {
-      mutedIcon.style.display = 'none';
-      unmutedIcon.style.display = 'block';
-    }
+      // Update sound button
+      if (this.isVideoMuted) {
+        mutedIcon.style.display = 'block';
+        unmutedIcon.style.display = 'none';
+      } else {
+        mutedIcon.style.display = 'none';
+        unmutedIcon.style.display = 'block';
+      }
 
-    // Update play button
-    if (this.isVideoPlaying) {
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'block';
+      // Update play button
+      if (this.isVideoPlaying) {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      } else {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+      }
     } else {
-      playIcon.style.display = 'block';
-      pauseIcon.style.display = 'none';
+      // Hide controls for embedded videos
+      soundBtn.style.display = 'none';
+      playBtn.style.display = 'none';
     }
   }
 }
@@ -1151,12 +794,6 @@ customElements.define('instagram-modal', InstagramModal);
   "class": "section",
   "max_blocks": 12,
   "settings": [
-		{
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
     {
       "type": "text",
       "id": "heading",
@@ -1218,6 +855,16 @@ customElements.define('instagram-modal', InstagramModal);
 			"label": "Item per row"
 		},
     {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Grid gap",
+      "default": 16
+    },
+    {
       "type": "header",
       "content": "Section padding"
     },
@@ -1257,6 +904,11 @@ customElements.define('instagram-modal', InstagramModal);
 					"id": "video",
 					"label": "Video"
 				},
+        {"type": "checkbox",
+          "id": "show_title",
+          "default": true,
+          "label": "Show title"
+        },
         {
           "type": "text",
           "id": "title",
@@ -1276,9 +928,10 @@ customElements.define('instagram-modal', InstagramModal);
           "label": "Tag"
         },
         {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
+          "type": "product_list",
+          "id": "product_list",
+          "limit": 4,
+          "label": "Product list"
         }
       ]
     }

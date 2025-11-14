@@ -1,0 +1,57 @@
+{{ 'section-age-verification.css' | asset_url | stylesheet_tag }}
+
+<div id="AgeVerification" class="age-verification" data-age-verification>
+  <div class="age-verification__overlay"></div>
+  <div class="age-verification__content">
+    {%- if settings.age_verification_image != blank -%}
+      <div class="age-verification__image">
+        {%- liquid
+          assign image_height = settings.age_verification_image_height
+          assign image_class = 'age-verification__image-img'
+        -%}
+        {{
+          settings.age_verification_image
+          | image_url: width: 1500
+          | image_tag:
+            loading: 'eager',
+            widths: '375, 550, 750, 1100, 1500',
+            height: image_height,
+            class: image_class,
+            alt: settings.age_verification_image.alt | escape
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="age-verification__text">
+      {%- if settings.age_verification_heading != blank -%}
+        <h2 class="age-verification__heading {{ settings.age_verification_heading_size }}">
+          {{ settings.age_verification_heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if settings.age_verification_button_label != blank -%}
+        <button
+          type="button"
+          class="age-verification__button button{% if settings.age_verification_button_style_secondary %} button--secondary{% else %} button--primary{% endif %}"
+          data-age-verification-button
+        >
+          {{ settings.age_verification_button_label | escape }}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+  #AgeVerification {
+    {%- if settings.age_verification_overlay_color != blank -%}
+      --age-verification-overlay-color: {{ settings.age_verification_overlay_color }};
+    {%- endif -%}
+    {%- if settings.age_verification_text_color != blank -%}
+      --age-verification-text-color: {{ settings.age_verification_text_color }};
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<script src="{{ 'age-verification.js' | asset_url }}" defer="defer"></script>
+

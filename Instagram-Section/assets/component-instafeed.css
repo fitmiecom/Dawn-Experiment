@@ -1,0 +1,550 @@
+.instafeed-section {
+	display: block;
+  padding-top: var(--section-padding-top, 36px);
+  padding-bottom: var(--section-padding-bottom, 36px);
+}
+
+.instagram-grid {
+display: grid;
+grid-template-columns: repeat(var(--item-per-row, 3), 1fr);
+gap: var(--instagram-grid-gap, 1rem);
+margin-top: 2rem;
+}
+
+.instagram-item {
+	position: relative;
+	border-radius: var(--instagram-item-radius);
+	overflow: hidden;
+	cursor: pointer;
+}
+
+/* Preload ready indicator */
+.instagram-item::after {
+	content: '';
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	width: 8px;
+	height: 8px;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.instagram-item[data-preload-ready="true"]::after {
+	background: #4CAF50;
+	opacity: 0;
+	visibility: hidden;
+}
+
+
+.instagram-media {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 1;
+	overflow: hidden;
+}
+
+.instagram-media img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.instagram-item:hover .instagram-media img {
+	transform: scale(1.05);
+}
+.instagram-media-placeholder {
+	border: 1px solid #e0e0e0;
+	border-radius: var(--instagram-item-radius);
+	overflow: hidden;
+}
+.instagram-video-placeholder {
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.instagram-video-play-icon {
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 50%;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.instagram-item:hover .instagram-video-play-icon {
+	background: rgba(0, 0, 0, 0.7);
+	transform: scale(1.1);
+}
+
+.instagram-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	display: flex;
+	align-items: flex-end;
+	padding: 1.5rem;
+	color: white;
+}
+.instagram-overlay .icon {
+	width: 32px;
+	height: 32px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.instagram-item:hover .instagram-overlay {
+	opacity: 1;
+}
+.instagram-title,
+.instagram-content {
+	color: white;
+	width: 100%;
+}
+
+.instagram-title {
+	margin-bottom: 1rem;
+}
+
+.instagram-description {
+	font-size: 0.9rem;
+	line-height: 1.4;
+	margin-bottom: 0.75rem;
+	opacity: 0.9;
+}
+/* ddddd */
+.instagram-modal-content{
+	height: calc(100dvh - 160px)!important
+
+}	.instagram-meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 0.8rem;
+	opacity: 0.8;
+}
+
+.instagram-tag {
+	background: rgba(255, 255, 255, 0.2);
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+	font-weight: 500;
+}
+
+.instagram-modal-products-list {
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 1rem;
+	overflow-x: scroll;
+	scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+/* CSS Scroll Snap for Instagram Modal Product List and Hide Scrollbar */
+.instagram-modal-products-list::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+.instagram-modal-products-list .instagram-product-item {
+  scroll-snap-align: start;
+}
+
+.instagram-product-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+	flex: 1 0 40%;
+}
+.instagram-product-image{
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 3/4;
+	object-fit: cover;
+}
+.instagram-product-link {
+	display: block;
+  text-decoration: none;
+  color: inherit;
+  line-height: 1.3;
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 749px) {
+	.instagram-grid {
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
+
+	.instagram-heading {
+		font-size: 2rem;
+	}
+
+	.instagram-subheading {
+		font-size: 1rem;
+	}
+
+	.instagram-overlay {
+		padding: 1rem;
+	}
+
+	.instagram-title {
+		font-size: 1rem;
+	}
+
+	.instagram-description {
+		font-size: 0.85rem;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.instagram-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+/* Modal Styles */
+.instagram-modal-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease;
+}
+
+.instagram-modal-container.active {
+	opacity: 1;
+	visibility: visible;
+}
+
+.instagram-modal-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.9);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+}
+
+.instagram-modal-content {
+	position: relative;
+	width: 100%;
+	max-width: 1200px;
+	max-height: 90vh;
+	background: var(--color-background);
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.instagram-modal-close {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	width: 40px;
+	height: 40px;
+	border: none;
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 50%;
+	cursor: pointer;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.instagram-modal-close:hover {
+	background: white;
+	transform: scale(1.1);
+}
+
+.instagram-modal-slider {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	background: #fff;
+	overflow: scroll;
+}
+
+.instagram-modal-nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 50px;
+	height: 50px;
+	border: none;
+	background: rgba(255, 255, 255, 0.9);
+	border-radius: 50%;
+	cursor: pointer;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.instagram-modal-nav:hover {
+	background: white;
+	transform: translateY(-50%) scale(1.1);
+}
+
+.instagram-modal-prev {
+	left: 1rem;
+}
+
+.instagram-modal-next {
+	right: 1rem;
+}
+
+.instagram-modal-slide-container {
+	flex: 1;
+	height: 100%;
+}
+
+.instagram-modal-slide {
+	display: flex;
+	height: 100%;
+}
+
+.instagram-modal-media {
+	flex: 1;
+	position: relative;
+	background: #000;
+}
+
+.instagram-modal-image-container,
+.instagram-modal-video-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.instagram-modal-image-container img {
+	height: 100%;
+	width: 100%;
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+
+.instagram-modal-video-container video {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.instagram-modal-video-controls {
+	position: absolute;
+	bottom: 1rem;
+	right: 1rem;
+	display: flex;
+	gap: 0.5rem;
+}
+
+.instagram-modal-sound-btn,
+.instagram-modal-play-btn {
+	width: 40px;
+	height: 40px;
+	border: none;
+	background: rgba(0, 0, 0, 0.7);
+	color: white;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.instagram-modal-sound-btn:hover,
+.instagram-modal-play-btn:hover {
+	background: rgba(0, 0, 0, 0.9);
+	transform: scale(1.1);
+}
+
+.instagram-modal-info {
+	flex: 0 0 400px;
+	padding: 2rem;
+	background: var(--color-background);
+	overflow-y: auto;
+}
+
+.instagram-modal-title {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	line-height: 1.3;
+}
+
+.instagram-modal-description {
+	font-size: 1rem;
+	line-height: 1.6;
+	margin-bottom: 1.5rem;
+	color: var(--color-text,#000);
+}
+
+.instagram-modal-meta {
+	margin-bottom: 1.5rem;
+}
+
+.instagram-modal-tag {
+	display: inline-block;
+	background: var(--color-accen,#000);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+.instagram-modal-product-link {
+	margin-top: 1rem;
+}
+
+.instagram-modal-product-link a {
+	display: inline-block;
+	background: var(--color-button);
+	color: var(--color-button-text);
+	padding: 0.75rem 1.5rem;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.instagram-modal-product-link a:hover {
+	background: var(--color-button-hover);
+	transform: translateY(-2px);
+}
+
+.instagram-modal-indicators {
+	position: absolute;
+	bottom: 1rem;
+	left: 50%;
+	transform: translateX(-50%);
+	background: rgba(0, 0, 0, 0.7);
+	color: white;
+	padding: 0.5rem 1rem;
+	border-radius: 20px;
+	font-size: 0.9rem;
+}
+
+/* Loading state */
+.instagram-modal-loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	color: white;
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.instagram-modal-loading-spinner {
+	width: 40px;
+	height: 40px;
+	border: 3px solid rgba(255, 255, 255, 0.3);
+	border-top: 3px solid white;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin-bottom: 1rem;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 768px) {
+	.instagram-modal-overlay {
+		padding: 1rem;
+	}
+
+	.instagram-modal-content {
+		height: calc(100dvh - 50px)!important
+	}
+
+	.instagram-modal-slide {
+		flex-direction: column;
+	}
+
+	.instagram-modal-media {
+		flex: 0 0 60%;
+	}
+
+	.instagram-modal-info {
+		flex: 0 0 40%;
+		padding: 1rem;
+	}
+
+	.instagram-modal-title {
+		font-size: 1.2rem;
+	}
+
+	.instagram-modal-description {
+		font-size: 0.9rem;
+	}
+
+	.instagram-modal-nav {
+		width: 40px;
+		height: 40px;
+	}
+
+	.instagram-modal-prev {
+		left: 0.5rem;
+	}
+
+	.instagram-modal-next {
+		right: 0.5rem;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.instagram-modal-slide {
+		flex-direction: column;
+	}
+
+	.instagram-modal-media {
+		flex: 0 0 50%;
+	}
+
+	.instagram-modal-info {
+		flex: 0 0 50%;
+		padding: 0.75rem;
+	}
+
+	.instagram-modal-title {
+		font-size: 1rem;
+	}
+
+	.instagram-modal-description {
+		font-size: 0.8rem;
+	}
+}

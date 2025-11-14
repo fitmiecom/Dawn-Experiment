@@ -1,0 +1,171 @@
+{{ 'section-age-verification.css' | asset_url | stylesheet_tag }}
+
+<div id="AgeVerification-{{ section.id }}" class="age-verification" data-age-verification>
+  <div class="age-verification__overlay"></div>
+  <div class="age-verification__content">
+    {%- if section.settings.image != blank -%}
+      <div class="age-verification__image">
+        {%- liquid
+          assign image_height = section.settings.image_height
+          assign image_class = 'age-verification__image-img'
+        -%}
+        {{
+          section.settings.image
+          | image_url: width: 1500
+          | image_tag:
+            loading: 'eager',
+            widths: '375, 550, 750, 1100, 1500',
+            height: image_height,
+            class: image_class,
+            alt: section.settings.image.alt | escape
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="age-verification__text">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="age-verification__heading {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <button
+          type="button"
+          class="age-verification__button button{% if section.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %}"
+          data-age-verification-button
+        >
+          {{ section.settings.button_label | escape }}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+  #AgeVerification-{{ section.id }} {
+    {%- if section.settings.overlay_color != blank -%}
+      --age-verification-overlay-color: {{ section.settings.overlay_color }};
+    {%- endif -%}
+    {%- if section.settings.text_color != blank -%}
+      --age-verification-text-color: {{ section.settings.text_color }};
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<script src="{{ 'age-verification.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Age Verification",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Image height"
+    },
+    {
+      "type": "header",
+      "content": "Heading Settings"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "You must be 21 or older to enter this site",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Enter Site",
+      "label": "Button label"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_style_secondary",
+      "default": false,
+      "label": "Use outline button style"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Age Verification"
+    }
+  ]
+}
+{% endschema %}
+
